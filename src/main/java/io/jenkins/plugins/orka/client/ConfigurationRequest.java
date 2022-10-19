@@ -32,7 +32,7 @@ public class ConfigurationRequest {
     private String scheduler;
 
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    private int memory;
+    private Float memory;
 
     public ConfigurationRequest(String vmName, String image, String baseImage, String configTemplate, int cpuCount) {
         this(vmName, image, baseImage, configTemplate, cpuCount, null);
@@ -51,8 +51,12 @@ public class ConfigurationRequest {
         this.configTemplate = configTemplate;
         this.cpuCount = cpuCount;
         this.scheduler = StringUtils.isNotBlank(scheduler) ? scheduler : null;
-        if (!StringUtils.isBlank(memory) && !StringUtils.equals(memory, "auto") && Integer.parseInt(memory) > 0) {
-            this.memory = Integer.parseInt(memory);
+        try {
+            if (!StringUtils.isBlank(memory) && !StringUtils.equals(memory, "auto") && Float.parseFloat(memory) > 0) {
+                this.memory = Float.parseFloat(memory);
+            }
+        } catch (NumberFormatException e) {
+            // Do nothing
         }
     }
 }
