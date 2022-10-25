@@ -15,15 +15,22 @@ public class OrkaVMConfig {
 
     private String memory;
 
+    private String tag;
+
+    @SerializedName("tag_required")
+    private boolean tagRequired;
+
     public OrkaVMConfig(String name, int cpuCount, String baseImage) {
-        this(name, cpuCount, baseImage, "auto");
+        this(name, cpuCount, baseImage, "auto", null, false);
     }
 
-    public OrkaVMConfig(String name, int cpuCount, String baseImage, String memory) {
+    public OrkaVMConfig(String name, int cpuCount, String baseImage, String memory, String tag, boolean tagRequired) {
         this.name = name;
         this.cpuCount = cpuCount;
         this.baseImage = baseImage;
         this.memory = memory;
+        this.tag = tag;
+        this.tagRequired = tagRequired;
     }
 
     public String getName() {
@@ -42,6 +49,14 @@ public class OrkaVMConfig {
         return this.memory;
     }
 
+    public String getTag() {
+        return this.tag;
+    }
+
+    public boolean getTagRequired() {
+        return this.tagRequired;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -50,6 +65,8 @@ public class OrkaVMConfig {
         result = prime * result + cpuCount;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((memory == null) ? 0 : memory.hashCode());
+        result = prime * result + ((tag == null) ? 0 : tag.hashCode());
+        result = prime * result + ((!tagRequired) ? 0 : Boolean.hashCode(tagRequired));
         return result;
     }
 
@@ -84,6 +101,13 @@ public class OrkaVMConfig {
                 return false;
             }
         } else if (!memory.equals(other.memory)) {
+            return false;
+        }
+        if (tag == null) {
+            if (other.tag != null) {
+                return false;
+            }
+        } else if (!tag.equals(other.tag)) {
             return false;
         }
         return true;

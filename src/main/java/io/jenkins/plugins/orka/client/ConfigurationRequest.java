@@ -34,17 +34,24 @@ public class ConfigurationRequest {
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     private int memory;
 
+    @SuppressFBWarnings("URF_UNREAD_FIELD")
+    private String tag;
+
+    @SerializedName("tag_required")
+    @SuppressFBWarnings("URF_UNREAD_FIELD")
+    private boolean tagRequired;
+
     public ConfigurationRequest(String vmName, String image, String baseImage, String configTemplate, int cpuCount) {
         this(vmName, image, baseImage, configTemplate, cpuCount, null);
     }
 
     public ConfigurationRequest(String vmName, String image, String baseImage, String configTemplate, int cpuCount,
             String scheduler) {
-        this(vmName, image, baseImage, configTemplate, cpuCount, scheduler, "auto");
+        this(vmName, image, baseImage, configTemplate, cpuCount, scheduler, "auto", null, false);
     }
 
     public ConfigurationRequest(String vmName, String image, String baseImage, String configTemplate, int cpuCount,
-            String scheduler, String memory) {
+            String scheduler, String memory, String tag, boolean tagRequired) {
         this.vmName = vmName;
         this.image = image;
         this.baseImage = baseImage;
@@ -54,5 +61,7 @@ public class ConfigurationRequest {
         if (!StringUtils.isBlank(memory) && !StringUtils.equals(memory, "auto") && Integer.parseInt(memory) > 0) {
             this.memory = Integer.parseInt(memory);
         }
+        this.tag = tag;
+        this.tagRequired = tagRequired;
     }
 }

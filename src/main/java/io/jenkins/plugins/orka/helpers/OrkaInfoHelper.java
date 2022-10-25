@@ -1,8 +1,11 @@
 package io.jenkins.plugins.orka.helpers;
 
 import hudson.util.ListBoxModel;
+import io.jenkins.plugins.orka.client.OrkaVMConfig;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang.StringUtils;
@@ -53,6 +56,23 @@ public class OrkaInfoHelper {
         }
 
         return model;
+    }
+
+    public List<OrkaVMConfig> fetchVmConfigs(String orkaEndpoint, String orkaCredentialsId,
+        boolean useJenkinsProxySettings, boolean ignoreSSLErrors) {
+
+        List<OrkaVMConfig> vmConfigs = new ArrayList<OrkaVMConfig>();
+        
+        try {
+            if (StringUtils.isNotBlank(orkaEndpoint) && orkaCredentialsId != null) {
+                OrkaClientProxy clientProxy = this.clientProxyFactory.getOrkaClientProxy(orkaEndpoint,
+                        orkaCredentialsId, useJenkinsProxySettings, ignoreSSLErrors);
+                vmConfigs = clientProxy.getVMConfigs();
+            }
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Exception in fetchVmConfigs", e);
+        }
+        return vmConfigs;
     }
 
     public ListBoxModel doFillBaseImageItems(String orkaEndpoint, String orkaCredentialsId,

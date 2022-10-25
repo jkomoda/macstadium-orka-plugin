@@ -24,6 +24,14 @@
         </f:entry>
       </f:optionalBlock>
 
+      <f:entry title="${%Tag}" field="tag" help="${descriptor.getHelpFile('tag')}">
+        <f:textbox id="tag"/>
+      </f:entry>
+
+      <f:entry title="${%Tag Required}" field="tagRequired" help="${descriptor.getHelpFile('tagRequired')}">
+        <f:checkbox id="tagRequired"/>
+      </f:entry>
+
       <f:entry title="${%Scheduler}" field="scheduler">
         <c:select />
       </f:entry>

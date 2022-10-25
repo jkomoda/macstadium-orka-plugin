@@ -83,14 +83,17 @@ public class OrkaClientProxy {
 
     public ConfigurationResponse createConfiguration(String vmName, String image, String baseImage,
             String configTemplate, int cpuCount, String scheduler) throws IOException {
-        return this.createConfiguration(vmName, image, baseImage, configTemplate, cpuCount, scheduler, "auto");
+        return this.createConfiguration(vmName, image, baseImage, configTemplate, cpuCount, scheduler, "auto",
+                null, false);
     }
 
     public ConfigurationResponse createConfiguration(String vmName, String image, String baseImage,
-            String configTemplate, int cpuCount, String scheduler, String memory) throws IOException {
+            String configTemplate, int cpuCount, String scheduler, String memory, String tag,
+            boolean tagRequired) throws IOException {
 
         try (OrkaClient client = getOrkaClient()) {
-            return client.createConfiguration(vmName, image, baseImage, configTemplate, cpuCount, scheduler, memory);
+            return client.createConfiguration(vmName, image, baseImage, configTemplate, cpuCount, scheduler, memory,
+                    tag, tagRequired);
         }
     }
 

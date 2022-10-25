@@ -1,6 +1,7 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:f="/lib/form" xmlns:c="/lib/credentials" xmlns:s="/io/jenkins/temp/jelly">
-
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:f="/lib/form" xmlns:c="/lib/credentials" xmlns:s="/io/jenkins/temp/jelly" xmlns:d="jelly:define" xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson">
+  
   <f:section title="${%ORKA Config}">
 
     <f:entry field="orkaCredentialsId" title="${%Orka Credentials}" description="Credentials used to access Orka">
@@ -35,8 +36,23 @@
       </f:entry>
     </f:advanced>
 
+    <st:bind var="descriptor" value="${descriptor}"/>
+
+    <script>
+    const onVmChange = () => {
+      const tagDataObj = ${descriptor.getTagData()};
+      const vm = document.getElementById("vm").value;
+      const tagDataArr = tagDataObj != undefined ? tagDataObj.tagData : [];
+      if (vm != '') {
+        const tagData = tagDataArr.find(data => data.vm === vm);
+        document.getElementById("tag").value = tagData?.tag ?? '';
+        document.getElementById("tagRequired").checked = tagData?.tagRequired ?? false;
+      }
+    }
+    </script>
+
     <f:entry title="${%VM}" field="vm">
-      <f:select checkMethod="post"/>
+      <f:select id="vm" checkMethod="post" onchange="onVmChange()"/>
     </f:entry>
 
     <f:optionalBlock title="${%Create a new VM config}" field="createNewVMConfig" inline="true">
@@ -57,6 +73,14 @@
       </f:entry>
 
     </f:optionalBlock>
+
+    <f:entry title="${%Tag}" field="tag" help="${descriptor.getHelpFile('tag')}">
+      <f:textbox id="tag"/>
+    </f:entry>
+
+    <f:entry title="${%Tag Required}" field="tagRequired" help="${descriptor.getHelpFile('tagRequired')}">
+      <f:checkbox id="tagRequired"/>
+    </f:entry>
 
     <f:entry field="vmCredentialsId" title="${%VM Credentials}" description="Credentials used to connect to the VM">
       <c:select />

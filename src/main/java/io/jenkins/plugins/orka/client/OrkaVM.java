@@ -24,13 +24,18 @@ public class OrkaVM {
 
     private String memory;
 
+    private String tag;
+
+    @SerializedName("tag_required")
+    private boolean tagRequired;
+
     public OrkaVM(String vmName, String deploymentStatus, int cpuCount, String baseImage, String image,
             String configurationTemplate) {
-        this(vmName, deploymentStatus, cpuCount, baseImage, image, configurationTemplate, "auto");
+        this(vmName, deploymentStatus, cpuCount, baseImage, image, configurationTemplate, "auto", null, false);
     }
 
     public OrkaVM(String vmName, String deploymentStatus, int cpuCount, String baseImage, String image,
-            String configurationTemplate, String memory) {
+            String configurationTemplate, String memory, String tag, boolean tagRequired) {
         this.vmName = vmName;
         this.deploymentStatus = deploymentStatus;
         this.cpuCount = cpuCount;
@@ -38,6 +43,8 @@ public class OrkaVM {
         this.image = image;
         this.configurationTemplate = configurationTemplate;
         this.memory = memory;
+        this.tag = tag;
+        this.tagRequired = tagRequired;
     }
 
     public String getVMName() {
@@ -68,6 +75,14 @@ public class OrkaVM {
         return this.memory;
     }
 
+    public String getTag() {
+        return this.tag;
+    }
+
+    public boolean getTagRequired() {
+        return this.tagRequired;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -79,6 +94,8 @@ public class OrkaVM {
         result = prime * result + ((image == null) ? 0 : image.hashCode());
         result = prime * result + ((vmName == null) ? 0 : vmName.hashCode());
         result = prime * result + ((memory == null) ? 0 : memory.hashCode());
+        result = prime * result + ((tag == null) ? 0 : tag.hashCode());
+        result = prime * result + ((!tagRequired) ? 0 : Boolean.hashCode(tagRequired));
         return result;
     }
 
@@ -137,6 +154,13 @@ public class OrkaVM {
                 return false;
             }
         } else if (!memory.equals(other.memory)) {
+            return false;
+        }
+        if (tag == null) {
+            if (other.tag != null) {
+                return false;
+            }
+        } else if (!tag.equals(other.tag)) {
             return false;
         }
         return true;
