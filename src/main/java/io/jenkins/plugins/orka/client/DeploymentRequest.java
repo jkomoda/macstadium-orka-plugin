@@ -19,6 +19,13 @@ public class DeploymentRequest {
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     private String scheduler;
 
+    @SuppressFBWarnings("URF_UNREAD_FIELD")
+    private String tag;
+
+    @SerializedName("tag_required")
+    @SuppressFBWarnings("URF_UNREAD_FIELD")
+    private boolean tagRequired;
+
     public DeploymentRequest(String vmName, String node) {
         this(vmName, node, null);
     }
@@ -27,5 +34,14 @@ public class DeploymentRequest {
         this.vmName = vmName;
         this.node = node;
         this.scheduler = StringUtils.isNotBlank(scheduler) ? scheduler : null;
+    }
+
+    public DeploymentRequest(String vmName, String node, String scheduler,
+        String tag, boolean tagRequired) {
+        this.vmName = vmName;
+        this.node = node;
+        this.scheduler = StringUtils.isNotBlank(scheduler) ? scheduler : null;
+        this.tag = tag;
+        this.tagRequired = tagRequired;
     }
 }

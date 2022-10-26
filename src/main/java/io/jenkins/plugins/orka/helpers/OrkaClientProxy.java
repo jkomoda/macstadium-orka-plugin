@@ -94,6 +94,16 @@ public class OrkaClientProxy {
         }
     }
 
+    public ConfigurationResponse createConfiguration(String vmName, String image, String baseImage,
+            String configTemplate, int cpuCount, String scheduler, String memory, String tag,
+            boolean tagRequired) throws IOException {
+
+        try (OrkaClient client = getOrkaClient()) {
+            return client.createConfiguration(vmName, image, baseImage, configTemplate, cpuCount, scheduler, memory,
+                    tag, tagRequired);
+        }
+    }
+
     public DeploymentResponse deployVM(String vmName) throws IOException {
         return this.deployVM(vmName, null);
     }
@@ -102,9 +112,17 @@ public class OrkaClientProxy {
         return this.deployVM(vmName, node, null);
     }
 
-    public DeploymentResponse deployVM(String vmName, String node, String scheduler) throws IOException {
+    public DeploymentResponse deployVM(String vmName, String node,
+        String scheduler) throws IOException {
         try (OrkaClient client = getOrkaClient()) {
             return client.deployVM(vmName, node, scheduler);
+        }
+    }
+
+    public DeploymentResponse deployVM(String vmName, String node, String scheduler,
+        String tag, boolean tagRequired) throws IOException {
+        try (OrkaClient client = getOrkaClient()) {
+            return client.deployVM(vmName, node, scheduler, tag, tagRequired);
         }
     }
 

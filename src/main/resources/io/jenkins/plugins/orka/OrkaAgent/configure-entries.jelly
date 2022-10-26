@@ -1,6 +1,6 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:f="/lib/form" xmlns:c="/lib/credentials" xmlns:s="/io/jenkins/temp/jelly">
-
+  
   <f:section title="${%ORKA Config}">
 
     <f:entry field="orkaCredentialsId" title="${%Orka Credentials}" description="Credentials used to access Orka">
@@ -56,6 +56,16 @@
         <f:textbox checkMethod="post" default="auto"/>
       </f:entry>
 
+    </f:optionalBlock>
+
+    <f:optionalBlock title="${%Set Tag Data}" field="setTagData" inline="true">
+      <f:entry title="${%Tag}" field="tag" help="${descriptor.getHelpFile('tag')}">
+        <f:textbox/>
+      </f:entry>
+
+      <f:entry title="${%Tag Required}" field="tagRequired" help="${descriptor.getHelpFile('tagRequired')}">
+        <f:checkbox/>
+      </f:entry>
     </f:optionalBlock>
 
     <f:entry field="vmCredentialsId" title="${%VM Credentials}" description="Credentials used to connect to the VM">

@@ -134,6 +134,22 @@ public class OrkaClient implements AutoCloseable {
         return response;
     }
 
+    public ConfigurationResponse createConfiguration(String vmName, String image, String baseImage,
+            String configTemplate, int cpuCount, String scheduler, String memory, String tag,
+            boolean tagRequired) throws IOException {
+
+        ConfigurationRequest configRequest = new ConfigurationRequest(vmName, image, baseImage, configTemplate,
+                cpuCount, scheduler, memory, tag, tagRequired);
+
+        String configRequestJson = new Gson().toJson(configRequest);
+
+        HttpResponse httpResponse = this.post(this.endpoint + VM_PATH + CREATE_PATH, configRequestJson);
+        ConfigurationResponse response = JsonHelper.fromJson(httpResponse.getBody(), ConfigurationResponse.class);
+        response.setHttpResponse(httpResponse);
+
+        return response;
+    }
+
     public DeploymentResponse deployVM(String vmName) throws IOException {
         return this.deployVM(vmName, null);
     }
@@ -144,6 +160,18 @@ public class OrkaClient implements AutoCloseable {
 
     public DeploymentResponse deployVM(String vmName, String node, String scheduler) throws IOException {
         DeploymentRequest deploymentRequest = new DeploymentRequest(vmName, node, scheduler);
+        String deploymentRequestJson = new Gson().toJson(deploymentRequest);
+
+        HttpResponse httpResponse = this.post(this.endpoint + VM_PATH + DEPLOY_PATH, deploymentRequestJson);
+        DeploymentResponse response = JsonHelper.fromJson(httpResponse.getBody(), DeploymentResponse.class);
+        response.setHttpResponse(httpResponse);
+
+        return response;
+    }
+
+    public DeploymentResponse deployVM(String vmName, String node, String scheduler,
+        String tag, boolean tagRequired) throws IOException {
+        DeploymentRequest deploymentRequest = new DeploymentRequest(vmName, node, scheduler, tag, tagRequired);
         String deploymentRequestJson = new Gson().toJson(deploymentRequest);
 
         HttpResponse httpResponse = this.post(this.endpoint + VM_PATH + DEPLOY_PATH, deploymentRequestJson);

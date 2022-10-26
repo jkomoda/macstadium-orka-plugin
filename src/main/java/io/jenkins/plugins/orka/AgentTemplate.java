@@ -51,6 +51,9 @@ public class AgentTemplate implements Describable<AgentTemplate> {
     private String baseImage;
     private int numCPUs;
     private String memory;
+    private boolean setTagData;
+    private String tag;
+    private boolean tagRequired;
     private int numExecutors;
     private Mode mode;
     private String remoteFS;
@@ -91,7 +94,7 @@ public class AgentTemplate implements Describable<AgentTemplate> {
             List<? extends NodeProperty<?>> nodeProperties, String jvmOptions, String scheduler) {
         this(vmCredentialsId, vm, createNewVMConfig, configName, baseImage, numCPUs, numExecutors, remoteFS,
                 mode, labelString, namePrefix, retentionStrategy, verificationStrategy, nodeProperties, jvmOptions,
-                scheduler, "auto");
+                scheduler, "auto", false, null, false);
 
     }
 
@@ -99,7 +102,8 @@ public class AgentTemplate implements Describable<AgentTemplate> {
     public AgentTemplate(String vmCredentialsId, String vm, boolean createNewVMConfig, String configName,
             String baseImage, int numCPUs, int numExecutors, String remoteFS, Mode mode, String labelString,
             String namePrefix, RetentionStrategy<?> retentionStrategy, OrkaVerificationStrategy verificationStrategy,
-            List<? extends NodeProperty<?>> nodeProperties, String jvmOptions, String scheduler, String memory) {
+            List<? extends NodeProperty<?>> nodeProperties, String jvmOptions, String scheduler, String memory,
+            boolean setTagData, String tag, boolean tagRequired) {
         this.vmCredentialsId = vmCredentialsId;
         this.vm = vm;
         this.createNewVMConfig = createNewVMConfig;
@@ -117,6 +121,9 @@ public class AgentTemplate implements Describable<AgentTemplate> {
         this.jvmOptions = jvmOptions;
         this.scheduler = scheduler;
         this.memory = memory;
+        this.setTagData = setTagData;
+        this.tag = tag;
+        this.tagRequired = tagRequired;
     }
 
     public String getOrkaCredentialsId() {
@@ -153,6 +160,18 @@ public class AgentTemplate implements Describable<AgentTemplate> {
 
     public String getMemory() {
         return this.memory;
+    }
+
+    public boolean getSetTagData() {
+        return this.setTagData;
+    }
+
+    public String getTag() {
+        return this.tag;
+    }
+
+    public boolean getTagRequired() {
+        return this.tagRequired;
     }
 
     public String getLabelString() {
@@ -213,7 +232,13 @@ public class AgentTemplate implements Describable<AgentTemplate> {
         String vmName = this.createNewVMConfig ? this.configName : this.vm;
 
         logger.fine("Deploying VM with name " + vmName);
-        DeploymentResponse response = this.parent.deployVM(vmName, this.getScheduler());
+        DeploymentResponse response;
+        if (this.getSetTagData()) {
+            response = this.parent.deployVM(vmName, this.getScheduler(), this.getTag(), this.getTagRequired());
+        } else {
+            response = this.parent.deployVM(vmName, this.getScheduler());
+        }
+
         try {
             logger.fine("Result deploying VM " + vmName + ":");
             logger.fine(response.toString());
@@ -245,6 +270,11 @@ public class AgentTemplate implements Describable<AgentTemplate> {
 
             if (!configExist) {
                 logger.fine("Creating config with name " + this.configName);
+                if (this.setTagData) {
+                    return parent.createConfiguration(this.configName, this.configName, this.baseImage,
+                        Constants.DEFAULT_CONFIG_NAME, this.numCPUs, this.scheduler, this.memory, this.tag,
+                        this.tagRequired);
+                }
                 return parent.createConfiguration(this.configName, this.configName, this.baseImage,
                         Constants.DEFAULT_CONFIG_NAME, this.numCPUs, this.scheduler, this.memory);
             }
@@ -360,9 +390,10 @@ public class AgentTemplate implements Describable<AgentTemplate> {
         return "AgentTemplate [baseImage=" + baseImage + ", configName=" + configName + ", createNewVMConfig="
                 + createNewVMConfig + ", idleTerminationMinutes=" + idleTerminationMinutes + ", labelString="
                 + labelString + ", namePrefix=" + namePrefix + ", mode=" + mode + ", nodeProperties="
-                + nodeProperties + ", numCPUs=" + numCPUs + ", memory=" + memory + ", numExecutors=" + numExecutors
-                + ", parent=" + parent + ", remoteFS=" + remoteFS + ", retentionStrategy=" + retentionStrategy
-                + ", verificationStrategy=" + verificationStrategy + ", vm=" + vm + ", vmCredentialsId="
-                + vmCredentialsId + " scheduler=" + scheduler + "]";
+                + nodeProperties + ", numCPUs=" + numCPUs + ", memory=" + memory + ", setTagData="
+                + setTagData + ", tag=" + tag + ", tagRequired=" + tagRequired + ", numExecutors="
+                + numExecutors + ", parent=" + parent + ", remoteFS=" + remoteFS + ", retentionStrategy="
+                + retentionStrategy + ", verificationStrategy=" + verificationStrategy + ", vm=" + vm
+                + ", vmCredentialsId=" + vmCredentialsId + " scheduler=" + scheduler + "]";
     }
 }

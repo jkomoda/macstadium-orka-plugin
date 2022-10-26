@@ -202,6 +202,15 @@ public class OrkaCloud extends Cloud {
                 .createConfiguration(name, image, baseImage, configTemplate, cpuCount, scheduler, memory);
     }
 
+    public ConfigurationResponse createConfiguration(String name, String image, String baseImage, String configTemplate,
+            int cpuCount, String scheduler, String memory, String tag, boolean tagRequired) throws IOException {
+        return new OrkaClientProxyFactory()
+                .getOrkaClientProxy(this.endpoint, this.credentialsId, this.httpTimeout, this.useJenkinsProxySettings,
+                        this.ignoreSSLErrors)
+                .createConfiguration(name, image, baseImage, configTemplate, cpuCount, scheduler, memory, tag,
+                        tagRequired);
+    }
+
     public DeploymentResponse deployVM(String name) throws IOException {
         return this.deployVM(name, null);
     }
@@ -211,6 +220,14 @@ public class OrkaCloud extends Cloud {
                 .getOrkaClientProxy(this.endpoint, this.credentialsId, this.timeout, this.useJenkinsProxySettings,
                         this.ignoreSSLErrors)
                 .deployVM(name, null, scheduler);
+    }
+
+    public DeploymentResponse deployVM(String name, String scheduler, String tag,
+        boolean tagRequired) throws IOException {
+        return new OrkaClientProxyFactory()
+                .getOrkaClientProxy(this.endpoint, this.credentialsId, this.timeout, this.useJenkinsProxySettings,
+                        this.ignoreSSLErrors)
+                .deployVM(name, null, scheduler, tag, tagRequired);
     }
 
     public void deleteVM(String name) throws IOException {

@@ -37,6 +37,9 @@ public class OrkaAgent extends AbstractCloudSlave {
     private String baseImage;
     private int numCPUs;
     private String memory;
+    private boolean setTagData;
+    private String tag;
+    private boolean tagRequired;
     private String jvmOptions;
 
     public OrkaAgent(String name, String orkaCredentialsId, String orkaEndpoint, String vmCredentialsId, String vm,
@@ -67,14 +70,15 @@ public class OrkaAgent extends AbstractCloudSlave {
 
         this(name, orkaCredentialsId, orkaEndpoint, vmCredentialsId, vm, node, redirectHost, createNewVMConfig,
                 configName, baseImage, numCPUs, numExecutors, host, port, remoteFS,
-                useJenkinsProxySettings, ignoreSSLErrors, jvmOptions, "auto");
+                useJenkinsProxySettings, ignoreSSLErrors, jvmOptions, "auto", false,  null, false);
     }
 
     @DataBoundConstructor
     public OrkaAgent(String name, String orkaCredentialsId, String orkaEndpoint, String vmCredentialsId, String vm,
             String node, String redirectHost, boolean createNewVMConfig, String configName, String baseImage,
             int numCPUs, int numExecutors, String host, int port, String remoteFS,
-            boolean useJenkinsProxySettings, boolean ignoreSSLErrors, String jvmOptions, String memory)
+            boolean useJenkinsProxySettings, boolean ignoreSSLErrors, String jvmOptions, String memory,
+            boolean setTagData, String tag, boolean tagRequired)
             throws Descriptor.FormException, IOException {
         super(name, remoteFS, new OrkaComputerLauncher(host, port, redirectHost, jvmOptions));
 
@@ -91,7 +95,9 @@ public class OrkaAgent extends AbstractCloudSlave {
         this.ignoreSSLErrors = ignoreSSLErrors;
         this.jvmOptions = jvmOptions;
         this.memory = memory;
-
+        this.setTagData = setTagData;
+        this.tag = tag;
+        this.tagRequired = tagRequired;
         this.setNumExecutors(numExecutors);
     }
 
@@ -141,6 +147,18 @@ public class OrkaAgent extends AbstractCloudSlave {
 
     public String getMemory() {
         return this.memory;
+    }
+
+    public boolean getSetTagData() {
+        return this.setTagData;
+    }
+
+    public String getTag() {
+        return this.tag;
+    }
+
+    public boolean getTagRequired() {
+        return this.tagRequired;
     }
 
     public String getJvmOptions() {
