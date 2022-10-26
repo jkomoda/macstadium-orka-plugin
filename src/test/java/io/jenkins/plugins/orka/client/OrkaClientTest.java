@@ -117,9 +117,9 @@ public class OrkaClientTest {
 
         OrkaClient client = mock(OrkaClient.class);
         when(client.post(anyString(), anyString())).thenReturn(response);
-        when(client.deployVM(anyString(), anyString(), any())).thenCallRealMethod();
+        when(client.deployVM(anyString(), anyString(), any(), any(), any())).thenCallRealMethod();
 
-        DeploymentResponse actualResponse = client.deployVM("newVm", "macpro-2", null);
+        DeploymentResponse actualResponse = client.deployVM("newVm", "macpro-2", null, null, null);
 
         assertEquals(ip, actualResponse.getHost());
         assertEquals(sshPort, actualResponse.getSSHPort());

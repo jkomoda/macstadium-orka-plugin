@@ -58,7 +58,7 @@
 
     </f:optionalBlock>
 
-    <f:optionalBlock title="${%Set Tag Data}" field="setTagData" inline="true">
+    <f:optionalBlock title="${%Overwrite Tag}" field="overwriteTag" inline="true">
       <f:entry title="${%Tag}" field="tag" help="${descriptor.getHelpFile('tag')}">
         <f:textbox/>
       </f:entry>

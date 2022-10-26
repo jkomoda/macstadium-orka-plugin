@@ -131,14 +131,8 @@ public final class OrkaComputerLauncher extends ComputerLauncher {
             String tag = agent.getTag();
             boolean tagRequired = agent.getTagRequired();
 
-            ConfigurationResponse configResponse;
-            if (agent.getSetTagData()) {
-                configResponse = clientProxy.createConfiguration(configName, image, baseImage,
-                    template, numCPUs, null, memory, tag, tagRequired);
-            } else {
-                configResponse = clientProxy.createConfiguration(configName, image, baseImage,
-                    template, numCPUs, null, memory);
-            }
+            ConfigurationResponse configResponse = clientProxy.createConfiguration(configName, image, baseImage,
+                template, numCPUs, null, memory, tag, tagRequired);
             
             if (!configResponse.isSuccessful()) {
                 logger.println(String.format(configurationErrorFormat, Utils.getTimestamp(), configName, image,
@@ -156,13 +150,8 @@ public final class OrkaComputerLauncher extends ComputerLauncher {
             throws IOException {
         String vmName = agent.getCreateNewVMConfig() ? agent.getConfigName() : agent.getVm();
 
-        DeploymentResponse deploymentResponse;
-        if (agent.getSetTagData()) {
-            deploymentResponse = clientProxy.deployVM(vmName, agent.getNode(),
-                null, agent.getTag(), agent.getTagRequired());
-        } else {
-            deploymentResponse = clientProxy.deployVM(vmName, agent.getNode(), null);
-        }
+        DeploymentResponse deploymentResponse = clientProxy.deployVM(vmName, agent.getNode(),
+            null, agent.getTag(), agent.getTagRequired());
 
         if (!deploymentResponse.isSuccessful()) {
             logger.println(

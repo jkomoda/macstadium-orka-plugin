@@ -196,14 +196,12 @@ public class OrkaCloud extends Cloud {
 
     public ConfigurationResponse createConfiguration(String name, String image, String baseImage, String configTemplate,
             int cpuCount, String scheduler, String memory) throws IOException {
-        return new OrkaClientProxyFactory()
-                .getOrkaClientProxy(this.endpoint, this.credentialsId, this.httpTimeout, this.useJenkinsProxySettings,
-                        this.ignoreSSLErrors)
-                .createConfiguration(name, image, baseImage, configTemplate, cpuCount, scheduler, memory);
+        return this.createConfiguration(name, image, baseImage, configTemplate, cpuCount, scheduler, memory,
+            null, null);
     }
 
     public ConfigurationResponse createConfiguration(String name, String image, String baseImage, String configTemplate,
-            int cpuCount, String scheduler, String memory, String tag, boolean tagRequired) throws IOException {
+            int cpuCount, String scheduler, String memory, String tag, Boolean tagRequired) throws IOException {
         return new OrkaClientProxyFactory()
                 .getOrkaClientProxy(this.endpoint, this.credentialsId, this.httpTimeout, this.useJenkinsProxySettings,
                         this.ignoreSSLErrors)
@@ -216,14 +214,11 @@ public class OrkaCloud extends Cloud {
     }
 
     public DeploymentResponse deployVM(String name, String scheduler) throws IOException {
-        return new OrkaClientProxyFactory()
-                .getOrkaClientProxy(this.endpoint, this.credentialsId, this.timeout, this.useJenkinsProxySettings,
-                        this.ignoreSSLErrors)
-                .deployVM(name, null, scheduler);
+        return this.deployVM(name, scheduler, null, null);
     }
 
     public DeploymentResponse deployVM(String name, String scheduler, String tag,
-        boolean tagRequired) throws IOException {
+        Boolean tagRequired) throws IOException {
         return new OrkaClientProxyFactory()
                 .getOrkaClientProxy(this.endpoint, this.credentialsId, this.timeout, this.useJenkinsProxySettings,
                         this.ignoreSSLErrors)

@@ -24,24 +24,22 @@ public class DeploymentRequest {
 
     @SerializedName("tag_required")
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    private boolean tagRequired;
+    private Boolean tagRequired;
 
     public DeploymentRequest(String vmName, String node) {
         this(vmName, node, null);
     }
 
     public DeploymentRequest(String vmName, String node, String scheduler) {
-        this.vmName = vmName;
-        this.node = node;
-        this.scheduler = StringUtils.isNotBlank(scheduler) ? scheduler : null;
+        this(vmName, node, scheduler, null, null);
     }
 
     public DeploymentRequest(String vmName, String node, String scheduler,
-        String tag, boolean tagRequired) {
+        String tag, Boolean tagRequired) {
         this.vmName = vmName;
         this.node = node;
         this.scheduler = StringUtils.isNotBlank(scheduler) ? scheduler : null;
-        this.tag = tag;
-        this.tagRequired = tagRequired;
+        this.tag = StringUtils.isNotBlank(tag) && tag != null ? tag : null;
+        this.tagRequired = tagRequired != null ? tagRequired : null;
     }
 }
